@@ -1,5 +1,12 @@
-import { listMovies } from "./../data/listMovies";
 import { useState, useEffect } from "react";
+export const listMovies = [
+  { id: 1, title: "Inception", genre: "Fantascienza" },
+  { id: 2, title: "Il Padrino", genre: "Thriller" },
+  { id: 3, title: "Titanic", genre: "Romantico" },
+  { id: 4, title: "Batman", genre: "Azione" },
+  { id: 5, title: "Interstellar", genre: "Fantascienza" },
+  { id: 6, title: "Pulp Fiction", genre: "Thriller" },
+];
 
 export default function Main() {
   const [search, setSearch] = useState({
@@ -8,42 +15,38 @@ export default function Main() {
 
   const [filtered, setFiltered] = useState(listMovies);
 
-  function handleSubmit(e) {
-    e.preventDefault();
-    setSearch({ genre: e.target.value });
-    console.log({ genre: e.target.value });
-    console.log(handleSubmit);
-  }
   useEffect(() => {
     if (search.genre) {
-      const filter = filtered.filter((movie) => {
-        if (movie.genre.toLowerCase().includes(search.genre.toLowerCase())) {
-          console.log(`il genere  che hai ricercato è ${movie.genre}`);
-          return true;
-        }
+      const filter = listMovies.filter((movie) => {
+        return movie.genre.toLowerCase().includes(search.genre.toLowerCase());
       });
-
       setFiltered(filter);
+    } else {
+      setFiltered(listMovies);
     }
   }, [search.genre]);
 
   return (
     <main className="p-5">
       <div className="container my-5">
-        <form onSubmit={handleSubmit} className="d-flex my-5" role="search">
-          <input
-            className="form-control me-2"
-            type="search"
-            placeholder="Search"
+        <form className="d-flex my-5" role="search">
+          <select
             value={search.genre}
             onChange={(e) => setSearch({ genre: e.target.value })}
-          />
-          <button className="btn btn-outline-success" type="submit">
-            Search
-          </button>
+            className="form-select"
+            aria-label="Default select example"
+          >
+            <option value={""}>Tutti i Film</option>
+            <option>Fantascienza</option>
+            <option>Thriller</option>
+            <option>Romantico</option>
+            <option>Azione</option>
+          </select>
+
+          {/* value={search.genre} */}
         </form>
         <div className="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 ">
-          {listMovies.map((movie) => {
+          {filtered.map((movie) => {
             return (
               <div key={movie.id} className="col my-4">
                 <div className="card ">
