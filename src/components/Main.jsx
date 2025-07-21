@@ -3,29 +3,30 @@ import { useState, useEffect } from "react";
 
 export default function Main() {
   const [search, setSearch] = useState({
-    title: "",
+    genre: "",
   });
 
-  //   function handleSubmit(e) {
-  //     e.preventDefault();
-  //     console.log(search);
-  //   }
   const [filtered, setFiltered] = useState(listMovies);
+
   function handleSubmit(e) {
     e.preventDefault();
+    setSearch({ genre: e.target.value });
+    console.log({ genre: e.target.value });
+    console.log(handleSubmit);
   }
   useEffect(() => {
-    const filter = filtered.filter((movie) => {
-      if (movie.title.includes(search.title)) {
-        console.log(search.title);
-        console.log(movie);
-      } else {
-        console.log("non trovato");
-      }
-    });
-  }, [search.title]);
+    if (search.genre) {
+      const filter = filtered.filter((movie) => {
+        if (movie.genre.toLowerCase().includes(search.genre.toLowerCase())) {
+          console.log(`il genere  che hai ricercato è ${movie.genre}`);
+          return true;
+        }
+      });
 
-  //////////////////
+      setFiltered(filter);
+    }
+  }, [search.genre]);
+
   return (
     <main className="p-5">
       <div className="container my-5">
@@ -34,7 +35,8 @@ export default function Main() {
             className="form-control me-2"
             type="search"
             placeholder="Search"
-            onChange={(e) => setSearch({ title: e.target.value })}
+            value={search.genre}
+            onChange={(e) => setSearch({ genre: e.target.value })}
           />
           <button className="btn btn-outline-success" type="submit">
             Search
@@ -47,6 +49,7 @@ export default function Main() {
                 <div className="card ">
                   <div className="card-body">
                     <h1>{movie.title}</h1>
+                    <span>Genere: {movie.genre}</span>
                   </div>
                 </div>
               </div>
