@@ -10,6 +10,7 @@ export const listMovies = [
 
 export default function Main() {
   const [search, setSearch] = useState({
+    title: "",
     genre: "",
   });
 
@@ -26,24 +27,45 @@ export default function Main() {
     }
   }, [search.genre]);
 
+  useEffect(() => {
+    if (search.title) {
+      const filter = listMovies.filter((movie) => {
+        return movie.title.toLowerCase().includes(search.title.toLowerCase());
+      });
+      setFiltered(filter);
+    } else {
+      setFiltered(listMovies);
+    }
+  }, [search.title]);
   return (
     <main className="p-5">
       <div className="container my-5">
-        <form className="d-flex my-5" role="search">
-          <select
-            value={search.genre}
-            onChange={(e) => setSearch({ genre: e.target.value })}
-            className="form-select"
-            aria-label="Default select example"
-          >
-            <option value={""}>Tutti i Film</option>
-            <option>Fantascienza</option>
-            <option>Thriller</option>
-            <option>Romantico</option>
-            <option>Azione</option>
-          </select>
+        <form className=" my-5" role="search">
+          <div>
+            <label htmlFor="">Seleziona il Genere</label>
+            <select
+              value={search.genre}
+              onChange={(e) => setSearch({ genre: e.target.value })}
+              className="form-select"
+            >
+              <option value={""}>Tutti i Film</option>
+              <option>Fantascienza</option>
+              <option>Thriller</option>
+              <option>Romantico</option>
+              <option>Azione</option>
+            </select>
+          </div>
 
-          {/* value={search.genre} */}
+          <div className="my-5">
+            <label htmlFor="">
+              Inserisci il titolo per la ricerca del film
+            </label>
+            <input
+              className="form-control"
+              onChange={(e) => setSearch({ title: e.target.value })}
+              type="text"
+            />
+          </div>
         </form>
         <div className="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 ">
           {filtered.map((movie) => {
