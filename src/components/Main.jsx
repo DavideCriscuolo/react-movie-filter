@@ -15,6 +15,10 @@ export default function Main() {
   });
 
   const [filtered, setFiltered] = useState(listMovies);
+  const [newFilm, setNewFilm] = useState({
+    title: "",
+    genre: "",
+  });
 
   useEffect(() => {
     if (search.genre) {
@@ -37,6 +41,13 @@ export default function Main() {
       setFiltered(listMovies);
     }
   }, [search.title]);
+
+  function handleSubmit(e) {
+    e.preventDefault();
+    setFiltered([newFilm, ...filtered]);
+    console.log(filtered);
+  }
+
   return (
     <main className="p-5">
       <div className="container my-5">
@@ -67,10 +78,22 @@ export default function Main() {
             />
           </div>
         </form>
+        <form action="" onSubmit={handleSubmit}>
+          {" "}
+          <label htmlFor="">Inserisci il titolo del nuovo film</label>
+          <input
+            className="form-control"
+            type="text"
+            onChange={(e) => setNewFilm({ title: e.target.value })}
+          />
+          <button type="submit" className="btn btn-success my-2">
+            Salva
+          </button>{" "}
+        </form>
         <div className="row row-cols-1 row-cols-sm-1 row-cols-md-2 row-cols-lg-3 ">
-          {filtered.map((movie) => {
+          {filtered.map((movie, index) => {
             return (
-              <div key={movie.id} className="col my-4">
+              <div key={index} className="col my-4">
                 <div className="card ">
                   <div className="card-body">
                     <h1>{movie.title}</h1>
